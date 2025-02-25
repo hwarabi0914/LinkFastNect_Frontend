@@ -1,10 +1,15 @@
-require('dotenv').config()
+require('dotenv').config();
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    env: {
-        // Reference a variable that was defined in the .env file and make it available at Build Time
-        API_ENDPOINT: process.env.API_ENDPOINT,
-      },
-}
+  env: {
+    // .env ファイルの変数をビルド時に使用できるようにする
+    API_ENDPOINT: process.env.API_ENDPOINT,
+  },
+  output: 'standalone', // ✅ 追加: standalone モードを有効化
+  experimental: {
+    appDir: true, // ✅ Next.js App Router を使用している場合に必要
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
