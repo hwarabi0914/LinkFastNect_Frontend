@@ -31,7 +31,7 @@ jobs:
       - name: Copy artifact for deployment job
         run: |
           mkdir -p ./deploy/.next/static  # ✅ ディレクトリを事前に作成
-          cp -r ./.next/standalone/* ./deploy
+          cp -r ./.next/standalone/. ./deploy
           cp -r ./.next/static ./deploy/.next/static
 
       - name: List files after copying
@@ -68,5 +68,5 @@ jobs:
         with:
           app-name: 'tech0-gen-9-step3-1-node-61'
           slot-name: 'Production'
-          package: .
+          package: ./deploy
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_83B37DEBED3541199ED66A19797E4220 }}
