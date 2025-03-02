@@ -50,9 +50,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    environment:
-      name: 'Production'
-      url: 'https://tech0-gen-9-step3-1-node-61.azurewebsites.net'
+    environment: 'Production'  # ✅ `url` を削除し、単純な環境名に修正
 
     steps:
       - name: Download artifact from build job
