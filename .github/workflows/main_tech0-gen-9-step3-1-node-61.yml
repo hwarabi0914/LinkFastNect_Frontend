@@ -38,7 +38,9 @@ jobs:
         run: ls -la ./deploy
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./deploy -r
+        run: |
+          sudo apt-get install -y zip  # ✅ 環境によっては zip コマンドがない場合に備える
+          zip -r release.zip .  # ✅ ルートディレクトリ全体を圧縮  
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -68,5 +70,5 @@ jobs:
         with:
           app-name: 'tech0-gen-9-step3-1-node-61'
           slot-name: 'Production'
-          package: ./deploy
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_83B37DEBED3541199ED66A19797E4220 }}
