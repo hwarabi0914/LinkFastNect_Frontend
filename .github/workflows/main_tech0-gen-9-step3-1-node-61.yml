@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p ./deploy/.next/static  # ✅ ディレクトリを事前に作成
           cp -r ./.next/standalone/. ./deploy
-          cp -r ./.next/static ./deploy/.next/static
+          cp -r ./.next/static/. ./deploy/.next/static
 
       - name: List files after copying
         run: ls -la ./deploy
