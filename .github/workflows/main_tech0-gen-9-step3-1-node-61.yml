@@ -28,17 +28,17 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
-      - name: Copy artifact for deployment job
+      - name: Prepare Deployment Folder
         run: |
-          mkdir deploy
-          cp -r ./.next/standalone/. ./deploy
-          cp -r ./.next/static/. ./deploy/.next/static
-
-      - name: List files after copying
-        run: ls -la ./deploy
+          mkdir -p ./deploy/.next/static
+          if [ -d "./.next/standalone" ]; then cp -r ./.next/standalone/. ./deploy; fi
+          if [ -d "./.next/static" ]; then cp -r ./.next/static/. ./deploy/.next/static; fi
+          ls -la ./deploy  # ✅ 確認用ログ
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./deploy -r
+        run: |
+          which zip || sudo apt-get install -y zip
+          zip -r release.zip ./deploy
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -51,7 +51,7 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: 'https://tech0-gen-9-step3-1-node-61.azurewebsites.net'  # ✅ 直接URLを設定
 
     steps:
       - name: Download artifact from build job
@@ -68,5 +68,8 @@ jobs:
         with:
           app-name: 'tech0-gen-9-step3-1-node-61'
           slot-name: 'Production'
-          package: ./deploy
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_83B37DEBED3541199ED66A19797E4220 }}
+          package: .  # ✅ ./deployではなく.に変更
+          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+
+      - name: Debug Output
+        run: echo "Web App URL: https://tech0-gen-9-step3-1-node-61.azurewebsites.net"
